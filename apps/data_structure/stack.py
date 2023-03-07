@@ -1,27 +1,35 @@
 class Stack():
-    stack = []
-
     def __init__(self, size: int) -> None:
-        self.size = size
+        self._stack = []
+        self._size = size
 
 
     def push(self, value):
-        if len(self.stack) == self.size:
+        if len(self._stack) == self._size:
             return -1
         else:
-            self.stack.append(value)
+            self._stack.append(value)
 
     def pop(self):
-        return self.stack.pop()
+        return self._stack.pop()
 
     def peek(self):
-        print(self.stack[-1])
+        print(self._stack[-1])
 
     def clear(self):
-        self.stack.clear()
+        self._stack.clear()
 
     def display(self):
-        print(self.stack)
+        print(self._stack)
 
     def empty(self):
-        return len(self.stack) == 0
+        return len(self._stack) == 0
+
+from collections import deque
+class Dstack(Stack):
+    def __init__(self, size=None) -> None:
+        self._stack = deque()
+        self._size = size
+
+    def push(self, value):
+        self._stack.append(value)
