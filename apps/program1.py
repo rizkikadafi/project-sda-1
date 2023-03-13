@@ -26,11 +26,11 @@ def decimal_conversion(dec: int, toBase: int):
 def biner_conversion(bin: str, toBase: int):
     negative = False
     if bin[0] == "-":
-        bin = bin[1:]
+        bin = bin[1:].lstrip('0')
         negative = True
 
-    if toBase == 2 or bin == "0" or bin == "1":
-        return bin
+    if toBase == 2:
+        return "-" + bin if negative else bin
 
     biner = deque([int(i) for i in bin])
     dec = 0
@@ -63,11 +63,11 @@ def biner_conversion(bin: str, toBase: int):
 def octal_conversion(oct: str, toBase: int):
     negative = False
     if oct[0] == "-":
-        oct = oct[1:]
+        oct = oct[1:].lstrip('0')
         negative = True
 
-    if toBase == 8 or oct == "0" or oct == "1":
-        return oct
+    if toBase == 8:
+        return "-" + oct if negative else oct
 
     conversion_stack = deque()
     octal = deque([int(i) for i in oct])
@@ -102,11 +102,11 @@ def octal_conversion(oct: str, toBase: int):
 def hexadecimal_conversion(hex: str, toBase: int):
     negative = False
     if hex[0] == "-":
-        hex = hex[1:]
+        hex = hex[1:].lstrip('0')
         negative = True
 
     if toBase == 16 or hex == "0" or hex == "1":
-        return hex
+        return "-" + hex if negative else hex
 
     result = "-" if negative else ""
 
