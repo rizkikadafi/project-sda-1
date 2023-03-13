@@ -16,8 +16,8 @@ class Load(App):
                 self.programs[opt-1].start()
                 count += 1
             elif count > 0:
-                confirm = self.prompt()
-                if confirm:
+                confirm = self.prompt_options(word="\nQuit Program?", opts=["y", "n"])
+                if confirm == "y":
                     break
                 else:
                     count = 0
