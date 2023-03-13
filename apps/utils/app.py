@@ -1,4 +1,4 @@
-from typing import Callable, Tuple
+from typing import Callable, Tuple, List
 
 class App():
     def __init__(self, name: str="My Program", title: str="========== My Program ==========\n", description: Tuple[str, bool]=("", True), program: Callable=lambda: None):
@@ -6,10 +6,29 @@ class App():
         self.title = title
         self.description = description
         self.program = program
+        self.running = True
 
-    def prompt(self, word="\nQuit Program?(y/n): ", options=("y", "n")):
-        ans = input(word)
-        return True if ans == options[0] else False
+    def prompt_options(self, word: str, opts: List, invalid_massage: str= "Input yang anda masukkan tidak valid!"):
+        while True:
+            list_opts = [i for i in opts]
+            str_opts = ""
+            for opt in list_opts:
+                if list_opts.index(opt) != len(list_opts) - 1:
+                    str_opts += f"{str(opt)}/"
+                else:
+                    str_opts += f"{str(opt)}"
+
+            ans = input(word + f" [{str_opts}] ({list_opts[0]}): ")
+
+            if ans.isdecimal():
+                ans = int(ans)
+
+            if ans in opts:
+                break
+
+            print(invalid_massage)
+
+        return ans       
         
     def clear(self):
         import os
@@ -18,10 +37,13 @@ class App():
             case "posix": os.system("clear")
             case "nt": os.system("cls") 
 
+    def stop(self):
+        self.running = False
+
     def start(self):
-        run = True
+        self.running = True
         count = 0
-        while run:
+        while self.running:
             self.clear()
             print(self.title)
             if not self.description[1]:
@@ -30,8 +52,3 @@ class App():
                     count += 1
                     
             self.program()
-            run = not self.prompt()
-
-
-
-
