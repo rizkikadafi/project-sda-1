@@ -52,7 +52,7 @@ def main():
                     print("\nData Kosong! Tidak ada data yang bisa ditampilkan!")
                     getpass.getpass("\nKlik 'Enter' untuk melanjutkan")
                 else:
-                    print()
+                    print("\nBerikut adalah data dalam tumpukan:")
                     while len(stack) > 0:
                         print(stack.pop())
                     print("\nData telah dikosongkan!")
@@ -62,7 +62,7 @@ def main():
                 if len(data) == 0:
                     print("\nData Kosong! Tidak ada data yang bisa ditampilkan!")
                 else:
-                    print()
+                    print("\nBerikut adalah data dalam tumpukan:")
                     while len(data) > 0:
                         print(data.pop())
                 getpass.getpass("\nKlik 'Enter' untuk melanjutkan")
@@ -74,8 +74,9 @@ def main():
 title = "========== Program 3: Implementasi Tumpukan Tanpa Batasan Data ==========\n" # untuk di tampilkan sebagai judul
 name = "Tumpukan Tanpa Batasan Data" # untuk di tampilkan di list menu
 description = ("""Deskripsi Program:
-Ini merupakan program implementasi struktur data tumpukan (stack) dengan menggunakan class deque pada python. 
-Pada program ini, maksimal data yang dapat dimasukkan tidak dibatasi.\n""", False) # deskripsi program
+* Ini merupakan program implementasi struktur data tumpukan (stack) dengan menggunakan class deque pada python. 
+* Program ini memiliki fitur untuk menambahkan, menampilkan dan menghapus data.
+* Pada program ini, maksimal data yang dapat dimasukkan tidak dibatasi.\n""", False) # deskripsi program
 program3 = App(name=name, title=title, description=description, program=main)
 
 if __name__ == "__main__":
