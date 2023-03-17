@@ -2,7 +2,7 @@ from utils.app import App
 from collections import deque
 
 def decimal_conversion(dec: int, toBase: int):
-    if toBase == 10 or dec == 0 or dec == 1:
+    if toBase == 10:
         return str(dec)
 
     current_dec = abs(dec)
@@ -105,8 +105,8 @@ def hexadecimal_conversion(hex: str, toBase: int):
         hex = hex[1:].lstrip('0')
         negative = True
 
-    if toBase == 16 or hex == "0" or hex == "1":
-        return "-" + hex if negative else hex
+    if toBase == 16:
+        return "-" + hex.upper() if negative else hex.upper()
 
     result = "-" if negative else ""
 
