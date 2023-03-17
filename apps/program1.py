@@ -28,6 +28,8 @@ def biner_conversion(bin: str, toBase: int):
     if bin[0] == "-":
         bin = bin[1:].lstrip('0')
         negative = True
+    else:
+        bin = bin.lstrip('0')
 
     if toBase == 2:
         return "-" + bin if negative else bin
@@ -65,6 +67,8 @@ def octal_conversion(oct: str, toBase: int):
     if oct[0] == "-":
         oct = oct[1:].lstrip('0')
         negative = True
+    else:
+        oct = oct.lstrip('0')
 
     if toBase == 8:
         return "-" + oct if negative else oct
@@ -104,6 +108,8 @@ def hexadecimal_conversion(hex: str, toBase: int):
     if hex[0] == "-":
         hex = hex[1:].lstrip('0')
         negative = True
+    else:
+        hex = hex.lstrip('0')
 
     if toBase == 16:
         return "-" + hex.upper() if negative else hex.upper()
@@ -213,9 +219,9 @@ def main():
 title = "========== Program 1: Konversi Sistem Bilangan ==========\n" # untuk di tampilkan sebagai judul
 name = "Konversi Sistem Bilangan" # untuk di tampilkan di list menu
 description = ("""Deskripsi Program:
-Ini merupakan program untuk mengonversi bilangan dari satu sistem bilangan ke sistem bilangan lain. 
-Program ini menggunakan implementasi struktur data tumpukan (stack) dalam melakuan konversi sistem bilangan. 
-Program ini hanya menangani bilangan bulat saja (positif dan negatif), dimana pada bilangan negatif diawali dengan tanda '-'.\n""", False) # deskripsi program
+* Ini merupakan program untuk mengonversi bilangan dari satu sistem bilangan ke sistem bilangan lain. 
+* Program ini menggunakan implementasi struktur data tumpukan (stack) dalam melakukan konversi sistem bilangan. 
+* Program ini hanya menangani bilangan bulat saja (positif dan negatif), dimana pada bilangan negatif diawali dengan tanda '-'.\n""", False) # deskripsi program
 
 program1 = App(name=name, title=title, description=description, program=main)
 
