@@ -9,16 +9,22 @@ class Load(App):
         while True:
             self.clear()
             print(self.title)
+
+            if count == 0 and not self.description[1]:
+                print(self.description[0])
+            else:
+                print(self.description[0])
+
+            print("Menu Program:")
             for i in range(len(self.programs)):
                 print(f"{i+1}. {self.programs[i].name}")
-            if count == 0:
-                opt = int(input("\nPilih Program: "))
+            if count % 2 == 0:
+                opt = int(self.prompt_options(word="\nPilih Program", opts=[1,2,3,4]))
                 self.programs[opt-1].start()
                 count += 1
-            elif count > 0:
+            else:
                 confirm = self.prompt_options(word="\nQuit Program?", opts=["y", "n"])
                 if confirm == "y":
                     break
                 else:
-                    count = 0
-
+                    count += 1
