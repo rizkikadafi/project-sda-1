@@ -50,5 +50,7 @@ class App():
                 if count == 0:
                     print(self.description[0])
                     count += 1
+            else:
+                print(self.description[0])
                     
             self.program()
