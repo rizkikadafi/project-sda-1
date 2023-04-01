@@ -10,7 +10,7 @@ Project SDA 1, merupakan project mata kuliah Struktur Data dan Algoritma yang be
 Tumpukan (Stack).
 """
 
-programs = Load(title=title, description=(description, True))
+programs = Load(title=title, description=(description, False))
 programs.add([program1, program2, program3, program4])
 
 if __name__ == "__main__":
