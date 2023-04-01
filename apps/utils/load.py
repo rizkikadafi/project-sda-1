@@ -12,7 +12,7 @@ class Load(App):
 
             if count == 0 and not self.description[1]:
                 print(self.description[0])
-            else:
+            elif self.description[1]:
                 print(self.description[0])
 
             print("Menu Program:")
