@@ -1,7 +1,22 @@
 from typing import Callable, Tuple, List
+from rich.console import Console
+from rich.panel import Panel
+from rich.layout import Layout
+from rich.text import Text
+from rich.padding import Padding
+from rich.prompt import Prompt, IntPrompt, Confirm, PromptBase, InvalidResponse
+from rich.align import Align
+
+console = Console()
+
+IntPrompt.validate_error_message = "[prompt.invalid]Harap masukkan bilangan bulat yang valid!"
+IntPrompt.illegal_choice_message = (
+    "[prompt.invalid.choice]Harap masukkan pilihan dari salah satu opsi yang tersedia!"
+)
+Confirm.validate_error_message = "[prompt.invalid]Harap masukkan Y atau N"
 
 class App():
-    def __init__(self, name: str="My Program", title: str="========== My Program ==========\n", description: Tuple[str, bool]=("", True), program: Callable=lambda: None):
+    def __init__(self, name: str="My Program", title: str="[bold #9ee5ff]My Program\n", description: Tuple[str, bool]=("", True), program: Callable=lambda: None):
         self.name = name
         self.title = title
         self.description = description
@@ -43,14 +58,16 @@ class App():
     def start(self):
         self.running = True
         count = 0
+        panel_description = Panel(self.description[0], title="[bold #9ee5ff]Deskripsi Program", title_align="left")
         while self.running:
-            self.clear()
-            print(self.title)
-            if not self.description[1]:
-                if count == 0:
-                    print(self.description[0])
-                    count += 1
+            console.clear()
+            console.rule(self.title)
+            print()
+
+            if not self.description[1] and count == 0:
+                console.print(panel_description)
+                count += 1
             else:
-                print(self.description[0])
+                console.print(panel_description)
                     
             self.program()

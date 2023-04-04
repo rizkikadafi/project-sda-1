@@ -4,13 +4,12 @@ sys.path.append("apps")
 from apps.utils.load import Load
 from apps import program1, program2, program3, program4
 
-title = "========== Project 1 SDA ==========\n"
-description = """Deskripsi Project:
-Project SDA 1, merupakan project mata kuliah Struktur Data dan Algoritma yang berisi program-program implementasi struktur data 
-Tumpukan (Stack).
+title = "[bold #9ee5ff]Project SDA 1[/]"
+description = """[bold]
+[italic]Project SDA 1[/], merupakan project mata kuliah [italic]Struktur Data dan Algoritma[/] yang berisi program-program implementasi struktur data [italic]Tumpukan (Stack)[/].
 """
 
-programs = Load(title=title, description=(description, False))
+programs = Load(title=title, description=(description, True))
 programs.add([program1, program2, program3, program4])
 
 if __name__ == "__main__":
