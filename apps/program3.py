@@ -1,5 +1,67 @@
-from utils.app import App
+from utils.app import *
+
 from collections import deque
+
+def full_data_panel(value) -> Panel:
+    """Panel untuk menampilkan info ketika data penuh."""
+
+    panel = Panel(Text(f"\nTumpukan telah penuh! [{value}] tidak dimasukkan!\n", justify="center", style="bold"), title="[bold]INFO")
+    return panel
+
+def success_panel(value, operation: str) -> Panel:
+    """Panel untuk menampilkan info ketika operasi tertentu berhasil dilakukan."""
+
+    panel = Panel("None")
+    match operation:
+        case "addition":
+            panel = Panel(Text(f"\n[{value}] berhasil dimasukkan.\n", justify="center", style="bold"), title="[bold]INFO")
+        case "deletion":
+            panel = Panel(Text(f"\n[{value}] berhasil dihapus!\n", justify="center", style="bold"), title="[bold]INFO")
+        case "emptying":
+            panel = Panel(Text(f"\nTumpukan telah dikosongkan!\n", justify="center", style="bold"), title="[bold]INFO")
+
+    return panel
+
+def empty_data_panel(operation: str) -> Panel:
+    """Panel untuk menampilkan info ketika data kosong."""
+
+    panel = Panel("None")
+    match operation:
+        case "deletion":
+            panel = Panel(Text("\nTumpukan Kosong! Tidak ada data yang bisa dihapus!\n", justify="center", style="bold"), title="[bold]INFO")
+        case "display_top_data":
+            panel = Panel(Text("\nTumpukan Kosong! Tidak ada data teratas yang bisa ditampilkan!\n", justify="center", style="bold"), title="[bold]INFO")
+        case "display_all_data":
+            panel = Panel(Text("\nTumpukan Kosong! Tidak ada data yang bisa ditampilkan!\n", justify="center", style="bold"), title="[bold]INFO")
+
+    return panel
+
+def table_data(data: deque, opt: str) -> Table | Panel:
+    """Tabel untuk menampilkan data."""
+
+    list_data = [i for i in data] 
+
+    table = Table()
+    table.add_column("No.", style="bold", justify="center")
+    table.add_column("Data", style="bold", min_width=20)
+
+    match opt:
+        case "top_data":
+            table.title = "[bold]Data Teratas"
+
+            table.add_row("1", data[-1])
+        case "all_data":
+            table.title = "[bold]Data Pada Tumpukan"
+
+            for i in range(len(list_data)):
+                table.add_row(f"{i+1}", list_data.pop())
+        case "all_data_deletion":
+            table.title = "[bold]Data Pada Tumpukan"
+
+            for i in range(len(list_data)):
+                table.add_row(f"{i+1}", data.pop())
+
+    return table
 
 def main():
     stack = deque()
@@ -8,75 +70,77 @@ def main():
         1: "Tambahkan data",
         2: "Hapus data teratas",
         3: "Tampilkan data teratas",
-        4: "Tampilkan seluruh data (Dengan penghapusan!)",
-        5: "Tampilkan seluruh data (Tanpa penghapusan)",
+        4: "Tampilkan seluruh data (Tanpa penghapusan)",
+        5: "Tampilkan seluruh data (Dengan penghapusan!)",
         6: "Keluar program"
     }   
 
     count = 0
     while True:
         if count > 0:
-            program3.clear()
-            print(program3.title)
+            console.clear()
+            console.rule(program3.title)
 
-        print("Menu Program:")
+        menu_str = "\n[bold]"
         for i, k in menu.items():
-            print(f"{i}. {k}")
+            menu_str += f"{i}. {k}\n"
 
-        opt = program3.prompt_options("\nPilih menu", [i for i in menu.keys()])
+        panel_menu = Panel(menu_str, title="[bold #9ee5ff]Menu Program", title_align="left")
+        console.print(Padding(panel_menu, pad=(1, 0, 0, 0)))
+
+        opt = IntPrompt.ask("[bold]\nPilih menu", choices=["1", "2", "3", "4", "5", "6"])
 
         import getpass
         match opt:
             case 1:
-                data = input("Masukkan data: ")
+                data = Prompt.ask("[bold]\nMasukkan data")
+
                 stack.append(data)
-                print(f"\n[{data}] telah dimasukkan.")
+                console.print(success_panel(data, operation="addition"))
+
                 getpass.getpass("\nKlik 'enter' untuk melanjutkan")
             case 2:
                 if len(stack) == 0:
-                    print("\nData Kosong! Tidak ada data yang bisa dihapus!")
-                    getpass.getpass("\nKlik 'Enter' untuk melanjutkan")
+                    console.print(empty_data_panel(operation="deletion"))
                 else:
                     data = stack.pop()
-                    print(f"\n[{data}] telah dihapus!")
-                    getpass.getpass("\nKlik 'Enter' untuk melanjutkan")
+                    console.print(success_panel(data, operation="deletion"))
+
+                getpass.getpass("\nKlik 'Enter' untuk melanjutkan")
             case 3:
                 if len(stack) == 0:
-                    print("\nData Kosong! Tidak ada data teratas yang bisa ditampilkan!")
-                    getpass.getpass("\nKlik 'Enter' untuk melanjutkan")
+                    console.print(empty_data_panel(operation="display_top_data"))
                 else:
-                    print(f"\nData teratas adalah [{stack[-1]}]")
-                    getpass.getpass("\nKlik 'Enter' untuk melanjutkan")
+                    console.print(table_data(stack, opt="top_data"), justify="center")
+
+                getpass.getpass("\nKlik 'Enter' untuk melanjutkan")
             case 4:
-                if len(stack) == 0:
-                    print("\nData Kosong! Tidak ada data yang bisa ditampilkan!")
-                    getpass.getpass("\nKlik 'Enter' untuk melanjutkan")
-                else:
-                    print("\nBerikut adalah data dalam tumpukan:")
-                    while len(stack) > 0:
-                        print(stack.pop())
-                    print("\nData telah dikosongkan!")
-                    getpass.getpass("\nKlik 'Enter' untuk melanjutkan")
-            case 5:
                 data = [i for i in stack] 
                 if len(data) == 0:
-                    print("\nData Kosong! Tidak ada data yang bisa ditampilkan!")
+                    console.print(empty_data_panel(operation="display_all_data"))
                 else:
-                    print("\nBerikut adalah data dalam tumpukan:")
-                    while len(data) > 0:
-                        print(data.pop())
+                    console.print(table_data(stack, opt="all_data"), justify="center")
+
+                getpass.getpass("\nKlik 'Enter' untuk melanjutkan")
+            case 5:
+                if len(stack) == 0:
+                    console.print(empty_data_panel(operation="display_all_data"))
+                else:
+                    console.print(table_data(stack, opt="all_data_deletion"), justify="center")
+                    console.print(Padding(success_panel(None, operation="emptying"), pad=(1, 0, 0, 0)))
+
                 getpass.getpass("\nKlik 'Enter' untuk melanjutkan")
             case 6:
                 return program3.stop()
 
         count += 1
 
-title = "========== Program 3: Implementasi Tumpukan Tanpa Batasan Data ==========\n" # untuk di tampilkan sebagai judul
+title = "[bold #9ee5ff]Program 3: Implementasi Tumpukan Tanpa Batasan Data\n" # untuk di tampilkan sebagai judul
 name = "Tumpukan Tanpa Batasan Data" # untuk di tampilkan di list menu
-description = ("""Deskripsi Program:
-* Ini merupakan program implementasi struktur data tumpukan (stack) dengan menggunakan class deque pada python. 
-* Program ini memiliki fitur untuk menambahkan, menampilkan dan menghapus data.
-* Pada program ini, maksimal data yang dapat dimasukkan tidak dibatasi.\n""", False) # deskripsi program
+description = ("""[bold]
+🔷 Program 3 merupakan program implementasi struktur data tumpukan (stack) dengan menggunakan class deque pada python. 
+🔷 Program ini memiliki fitur untuk menambahkan, menampilkan dan menghapus data.
+🔷 Pada program ini, maksimal data yang dapat dimasukkan tidak dibatasi.\n""", True) # deskripsi program
 program3 = App(name=name, title=title, description=description, program=main)
 
 if __name__ == "__main__":

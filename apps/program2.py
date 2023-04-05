@@ -75,8 +75,8 @@ def main():
         1: "Tambahkan data",
         2: "Hapus data teratas",
         3: "Tampilkan data teratas",
-        4: "Tampilkan seluruh data (Dengan penghapusan!)",
-        5: "Tampilkan seluruh data (Tanpa penghapusan)",
+        4: "Tampilkan seluruh data (Tanpa penghapusan)",
+        5: "Tampilkan seluruh data (Dengan penghapusan!)",
         6: "Keluar program"
     }
 
@@ -101,42 +101,40 @@ def main():
                 data = Prompt.ask("[bold]\nMasukkan data")
                 if stack.full():
                     console.print(full_data_panel(data))
-                    getpass.getpass("\nKlik 'Enter' untuk melanjutkan")
                 else:
                     stack.push(data)
                     console.print(success_panel(data, operation="addition"))
-                    getpass.getpass("\nKlik 'Enter' untuk melanjutkan")
+
+                getpass.getpass("\nKlik 'Enter' untuk melanjutkan")
             case 2:
                 if stack.empty():
                     console.print(empty_data_panel(operation="deletion"))
-                    getpass.getpass("\nKlik 'Enter' untuk melanjutkan")
                 else:
                     data = stack.pop()
                     console.print(success_panel(data, operation="deletion"))
-                    getpass.getpass("\nKlik 'Enter' untuk melanjutkan")
+
+                getpass.getpass("\nKlik 'Enter' untuk melanjutkan")
             case 3:
                 if stack.empty():
                     console.print(empty_data_panel(operation="display_top_data"))
-                    getpass.getpass("\nKlik 'Enter' untuk melanjutkan")
                 else:
                     console.print(table_data(stack, opt="top_data"), justify="center")
-                    getpass.getpass("\nKlik 'Enter' untuk melanjutkan")
+
+                getpass.getpass("\nKlik 'Enter' untuk melanjutkan")
             case 4:
-                if stack.empty():
-                    console.print(empty_data_panel(operation="display_all_data"))
-                    getpass.getpass("\nKlik 'Enter' untuk melanjutkan")
-                else:
-                    if stack.empty():
-                        console.print(empty_data_panel(operation="display_all_data"))
-                    else:
-                        console.print(table_data(stack, opt="all_data_deletion"), justify="center")
-                        console.print(Padding(success_panel(None, operation="emptying"), pad=(1, 0, 0, 0)))
-                    getpass.getpass("\nKlik 'Enter' untuk melanjutkan")
-            case 5:
                 if stack.empty():
                     console.print(empty_data_panel(operation="display_all_data"))
                 else:
                     console.print(table_data(stack, opt="all_data"), justify="center")
+
+                getpass.getpass("\nKlik 'Enter' untuk melanjutkan")
+            case 5:
+                if stack.empty():
+                    console.print(empty_data_panel(operation="display_all_data"))
+                else:
+                    console.print(table_data(stack, opt="all_data_deletion"), justify="center")
+                    console.print(Padding(success_panel(None, operation="emptying"), pad=(1, 0, 0, 0)))
+
                 getpass.getpass("\nKlik 'Enter' untuk melanjutkan")
             case 6:
                 return program2.stop()
