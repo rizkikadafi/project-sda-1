@@ -157,6 +157,9 @@ class BinPrompt(PromptBase):
     def process_response(self, value: str):
         value = value.strip()
 
+        if not value:
+            raise InvalidResponse(self.validate_error_massage)
+
         negative_value = False
         if value[0] == "-":
             value = value[1:]
@@ -174,6 +177,9 @@ class OctPrompt(PromptBase):
 
     def process_response(self, value: str):
         value = value.strip()
+
+        if not value:
+            raise InvalidResponse(self.validate_error_massage)
 
         negative_value = False
         if value[0] == "-":
@@ -193,6 +199,9 @@ class DecPrompt(PromptBase):
     def process_response(self, value: str):
         value = value.strip()
 
+        if not value:
+            raise InvalidResponse(self.validate_error_massage)
+
         negative_value = False
         if value[0] == "-":
             value = value[1:]
@@ -210,6 +219,9 @@ class HexPrompt(PromptBase):
 
     def process_response(self, value: str):
         value = value.strip()
+
+        if not value:
+            raise InvalidResponse(self.validate_error_massage)
 
         negative_value = False
         if value[0] == "-":
@@ -231,24 +243,22 @@ def main():
         4: ("Heksadesimal", 16)
     }
 
-    count = 0
     menu = "\n[bold]"
     for k, v in number_system.items():
         menu += f"{k}. {v[0]}\n"
 
     panel_menu = Panel(menu, title="[bold #9ee5ff]Sistem Bilangan", title_align="left")
-    panel_description = Panel(program1.description[0], title="[bold #9ee5ff]Deskripsi Program", title_align="left")
+    panel_description = Panel(program1.description, title="[bold #9ee5ff]Deskripsi Program", title_align="left")
 
     while True:
-        if count > 0:
-            console.clear()
-            console.rule(program1.title)
-            console.print(Padding(panel_description, pad=(1, 0, 0, 0)))
-        
-        console.print(panel_menu)
+        console.clear()
+        console.rule(program1.title)
+        console.print(Padding(panel_description, pad=(1, 0, 0, 0)))
+
+        console.print(Padding(panel_menu, pad=(1, 0, 0, 0)))
 
         # pilih sistem bilangan yang ingin di konversi
-        base = IntPrompt.ask("Pilih sistem bilangan yang ingin dikonversi", choices=["1", "2", "3", "4"])
+        base = IntPrompt.ask("\nPilih sistem bilangan yang ingin dikonversi", choices=["1", "2", "3", "4"])
 
         # pilih tujuan konversi
         to_base = IntPrompt.ask("Pilih tujuan konversi", choices=["1", "2", "3", "4"])
@@ -257,7 +267,6 @@ def main():
         console.print("\nBerikut adalah konversi yang ingin dilakukan: ", justify="center")
         console.print(f"[bold]{number_system[base][0]}[/] ➔ [bold]{number_system[to_base][0]}\n[/]", justify="center")
 
-        count += 1
         if Confirm.ask("[bold]Apakah anda yakin ingin melakukan konversi tersebut?"):
             break
 
@@ -299,10 +308,10 @@ def main():
 
 title = "[bold #9ee5ff]Program 1: Konversi Sistem Bilangan\n" # untuk di tampilkan sebagai judul
 name = "Konversi Sistem Bilangan" # untuk di tampilkan di list menu
-description = ("""[bold]
+description = """[bold]
 🔷 Program 1 merupakan program untuk mengonversi bilangan dari satu sistem bilangan ke sistem bilangan lain. 
 🔷 Program ini menggunakan implementasi struktur data tumpukan (stack) dalam melakukan konversi sistem bilangan. 
-🔷 Program ini hanya menangani bilangan bulat saja (positif dan negatif), dimana pada bilangan negatif diawali dengan tanda '-'.\n""", True) # deskripsi program
+🔷 Program ini hanya menangani bilangan bulat saja (positif dan negatif), dimana pada bilangan negatif diawali dengan tanda '-'.\n""" # deskripsi program
 
 program1 = App(name=name, title=title, description=description, program=main)
 

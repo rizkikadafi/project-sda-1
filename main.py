@@ -9,7 +9,7 @@ description = """[bold]
 [italic]Project SDA 1[/], merupakan project mata kuliah [italic]Struktur Data dan Algoritma[/] yang berisi program-program implementasi struktur data [italic]Tumpukan (Stack)[/].
 """
 
-programs = Load(title=title, description=(description, True))
+programs = Load(title=title, description=description)
 programs.add([program1, program2, program3, program4])
 
 if __name__ == "__main__":

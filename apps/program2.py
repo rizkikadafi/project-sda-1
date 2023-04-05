@@ -80,17 +80,16 @@ def main():
         6: "Keluar program"
     }
 
-    count = 0
+    menu_str = "\n[bold]"
+    for i, k in menu.items():
+        menu_str += f"{i}. {k}\n"
+
+    panel_menu = Panel(menu_str, title="[bold #9ee5ff]Menu Program", title_align="left")
+
     while True:
-        if count > 0:
-            console.clear()
-            console.rule(program2.title)
+        console.clear()
+        console.rule(program2.title)
 
-        menu_str = "\n[bold]"
-        for i, k in menu.items():
-            menu_str += f"{i}. {k}\n"
-
-        panel_menu = Panel(menu_str, title="[bold #9ee5ff]Menu Program", title_align="left")
         console.print(Padding(panel_menu, pad=(1, 0, 0, 0)))
 
         opt = IntPrompt.ask("[bold]\nPilih menu", choices=["1", "2", "3", "4", "5", "6"])
@@ -139,14 +138,12 @@ def main():
             case 6:
                 return program2.stop()
 
-        count += 1
-
 title = "[bold #9ee5ff]Program 2: Implementasi Tumpukan dengan Array" # untuk di tampilkan sebagai judul
 name = "Tumpukan dengan Array" # untuk di tampilkan di list menu
-description = ("""[bold]
+description = """[bold]
 🔷 Program 2 merupakan program implementasi struktur data tumpukan (stack) dengan menggunakan array. 
 🔷 Program ini memiliki fitur untuk menambahkan, menampilkan dan menghapus data.
-🔷 Pada program ini, maksimal data yang dapat dimasukkan dibatasi dan dapat ditentukan oleh user.\n""", False) # deskripsi program
+🔷 Pada program ini, maksimal data yang dapat dimasukkan dibatasi dan dapat ditentukan oleh user.\n""" # deskripsi program
 program2 = App(name=name, title=title, description=description, program=main)
 
 if __name__ == "__main__":

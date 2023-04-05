@@ -75,17 +75,18 @@ def main():
         6: "Keluar program"
     }   
 
-    count = 0
+    menu_str = "\n[bold]"
+    for i, k in menu.items():
+        menu_str += f"{i}. {k}\n"
+
+    panel_menu = Panel(menu_str, title="[bold #9ee5ff]Menu Program", title_align="left")
+    panel_description = Panel(program3.description, title="[bold #9ee5ff]Deskripsi Program", title_align="left")
+
     while True:
-        if count > 0:
-            console.clear()
-            console.rule(program3.title)
+        console.clear()
+        console.rule(program3.title)
+        console.print(Padding(panel_description, pad=(1, 0, 0, 0)))
 
-        menu_str = "\n[bold]"
-        for i, k in menu.items():
-            menu_str += f"{i}. {k}\n"
-
-        panel_menu = Panel(menu_str, title="[bold #9ee5ff]Menu Program", title_align="left")
         console.print(Padding(panel_menu, pad=(1, 0, 0, 0)))
 
         opt = IntPrompt.ask("[bold]\nPilih menu", choices=["1", "2", "3", "4", "5", "6"])
@@ -133,14 +134,12 @@ def main():
             case 6:
                 return program3.stop()
 
-        count += 1
-
 title = "[bold #9ee5ff]Program 3: Implementasi Tumpukan Tanpa Batasan Data\n" # untuk di tampilkan sebagai judul
 name = "Tumpukan Tanpa Batasan Data" # untuk di tampilkan di list menu
-description = ("""[bold]
+description = """[bold]
 🔷 Program 3 merupakan program implementasi struktur data tumpukan (stack) dengan menggunakan class deque pada python. 
 🔷 Program ini memiliki fitur untuk menambahkan, menampilkan dan menghapus data.
-🔷 Pada program ini, maksimal data yang dapat dimasukkan tidak dibatasi.\n""", True) # deskripsi program
+🔷 Pada program ini, maksimal data yang dapat dimasukkan tidak dibatasi.\n""" # deskripsi program
 program3 = App(name=name, title=title, description=description, program=main)
 
 if __name__ == "__main__":

@@ -1,4 +1,4 @@
-from typing import Callable, Tuple, List
+from typing import Callable, List
 from rich.console import Console
 from rich.panel import Panel
 from rich.table import Table
@@ -17,7 +17,7 @@ IntPrompt.illegal_choice_message = (
 Confirm.validate_error_message = "[prompt.invalid]Harap masukkan Y atau N"
 
 class App():
-    def __init__(self, name: str="My Program", title: str="[bold #9ee5ff]My Program\n", description: Tuple[str, bool]=("", True), program: Callable=lambda: None):
+    def __init__(self, name: str="My Program", title: str="[bold #9ee5ff]My Program\n", description: str="", program: Callable=lambda: None):
         self.name = name
         self.title = title
         self.description = description
@@ -58,17 +58,12 @@ class App():
 
     def start(self):
         self.running = True
-        count = 0
-        panel_description = Panel(self.description[0], title="[bold #9ee5ff]Deskripsi Program", title_align="left")
+        panel_description = Panel(self.description, title="[bold #9ee5ff]Deskripsi Program", title_align="left")
         while self.running:
             console.clear()
             console.rule(self.title)
             print()
 
-            if not self.description[1] and count == 0:
-                console.print(panel_description)
-                count += 1
-            else:
-                console.print(panel_description)
+            console.print(panel_description)
                     
             self.program()
