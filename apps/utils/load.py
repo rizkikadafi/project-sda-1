@@ -1,4 +1,4 @@
-from .app import App, Panel, Padding, IntPrompt, Confirm, console
+from .app import App, Panel, Padding, IntPrompt, Confirm, Text, console
 
 class Load(App):
     def add(self, programs):
@@ -11,6 +11,7 @@ class Load(App):
 
         panel_menu = Panel(menus, title="[bold #9ee5ff]Menu Program", title_align="left")
         panel_description = Panel(self.description, title="[bold #9ee5ff]Deskripsi", title_align="left")
+        panel_closing = Panel(Text("\n🙏Terima kasih telah menggunakan aplikasi ini🙏\n", justify="center", style="bold white"), title="[bold #9ee5ff]Program Selesai", style="bold #9ee5ff")
 
         count = 0
         while True:
@@ -25,6 +26,8 @@ class Load(App):
                 count += 1
             else:
                 if Confirm.ask("[bold]\nKeluar Program?"):
+                    console.clear()
+                    console.print(panel_closing)
                     break
                 else:
                     count += 1
