@@ -1,7 +1,9 @@
-from utils.app import App
+from utils.app import *
+
 from collections import deque
 
 def decimal_conversion(dec: int, toBase: int):
+    """Fungsi untuk konversi dari sistem bilangan desimal ke sistem bilangan lain."""
     if toBase == 10:
         return str(dec)
 
@@ -24,6 +26,7 @@ def decimal_conversion(dec: int, toBase: int):
     return result
 
 def biner_conversion(bin: str, toBase: int):
+    """Fungsi untuk konversi dari sistem bilangan biner ke sistem bilangan lain."""
     negative = False
     if bin[0] == "-":
         bin = bin[1:].lstrip('0')
@@ -63,6 +66,7 @@ def biner_conversion(bin: str, toBase: int):
     return result
 
 def octal_conversion(oct: str, toBase: int):
+    """Fungsi untuk konversi dari sistem bilangan oktal ke sistem bilangan lain."""
     negative = False
     if oct[0] == "-":
         oct = oct[1:].lstrip('0')
@@ -104,6 +108,7 @@ def octal_conversion(oct: str, toBase: int):
     return result
 
 def hexadecimal_conversion(hex: str, toBase: int):
+    """Fungis untuk konversi dari sistem bilangan hexadesimal ke sistem bilangan lain."""
     negative = False
     if hex[0] == "-":
         hex = hex[1:].lstrip('0')
@@ -145,6 +150,90 @@ def hexadecimal_conversion(hex: str, toBase: int):
 
     return result
 
+class BinPrompt(PromptBase):
+    response_type = int
+    validate_error_massage = "[prompt.invalid]Harap masukkan angka yang valid pada Sistem Bilangan Biner!"
+
+    def process_response(self, value: str):
+        value = value.strip()
+
+        if not value:
+            raise InvalidResponse(self.validate_error_massage)
+
+        negative_value = False
+        if value[0] == "-":
+            value = value[1:]
+            negative_value = True
+
+        value = value.lstrip("0")
+
+        if (not value.isdecimal() or not all([int(i) < 2 for i in value])):
+            raise InvalidResponse(self.validate_error_massage)
+        return "-" + value if negative_value else value 
+
+class OctPrompt(PromptBase):
+    response_type = int
+    validate_error_massage = "[prompt.invalid]Harap masukkan angka yang valid pada Sistem Bilangan Oktal!"
+
+    def process_response(self, value: str):
+        value = value.strip()
+
+        if not value:
+            raise InvalidResponse(self.validate_error_massage)
+
+        negative_value = False
+        if value[0] == "-":
+            value = value[1:]
+            negative_value = True
+
+        value = value.lstrip("0")
+
+        if (not value.isdecimal() or not all([int(i) < 8 for i in value])):
+            raise InvalidResponse(self.validate_error_massage)
+        return "-" + value if negative_value else value 
+
+class DecPrompt(PromptBase):
+    response_type = int
+    validate_error_massage = "[prompt.invalid]Harap masukkan angka yang valid pada Sistem Bilangan Desimal!"
+
+    def process_response(self, value: str):
+        value = value.strip()
+
+        if not value:
+            raise InvalidResponse(self.validate_error_massage)
+
+        negative_value = False
+        if value[0] == "-":
+            value = value[1:]
+            negative_value = True
+
+        value = value.lstrip("0")
+
+        if not value.isdecimal():
+            raise InvalidResponse(self.validate_error_massage)
+        return "-" + value if negative_value else value 
+
+class HexPrompt(PromptBase):
+    response_type = int
+    validate_error_massage = "[prompt.invalid]Harap masukkan angka yang valid pada Sistem Bilangan Heksadesimal!"
+
+    def process_response(self, value: str):
+        value = value.strip()
+
+        if not value:
+            raise InvalidResponse(self.validate_error_massage)
+
+        negative_value = False
+        if value[0] == "-":
+            value = value[1:]
+            negative_value = True
+
+        value = value.lstrip("0").upper()
+
+        if not (all([ord(i) >= 65 and ord(i) <= 70 for i in value if i.isalpha()]) and value.isalnum()):
+            raise InvalidResponse(self.validate_error_massage)
+        return "-" + value if negative_value else value 
+
 def main():
     # Menu sistem bilangan
     number_system = {
@@ -154,74 +243,75 @@ def main():
         4: ("Heksadesimal", 16)
     }
 
-    count = 0
+    menu = "\n[bold]"
+    for k, v in number_system.items():
+        menu += f"{k}. {v[0]}\n"
+
+    panel_menu = Panel(menu, title="[bold #9ee5ff]Sistem Bilangan", title_align="left")
+    panel_description = Panel(program1.description, title="[bold #9ee5ff]Deskripsi Program", title_align="left")
+
     while True:
-        if count > 0:
-            program1.clear()
-            print(program1.title)
-        print("Sistem Bilangan:")
-        for k, v in number_system.items():
-            print(f"{k}. {v[0]}")
+        console.clear()
+        console.rule(program1.title)
+        console.print(Padding(panel_description, pad=(1, 0, 0, 0)))
+
+        console.print(Padding(panel_menu, pad=(1, 0, 0, 0)))
 
         # pilih sistem bilangan yang ingin di konversi
-        base = int(program1.prompt_options(word="\nPilih sistem bilangan yang ingin dikonversi", opts=[1,2,3,4]))
+        base = IntPrompt.ask("\nPilih sistem bilangan yang ingin dikonversi", choices=["1", "2", "3", "4"])
 
         # pilih tujuan konversi
-        to_base = int(program1.prompt_options(word="Pilih tujuan konversi", opts=[1,2,3,4]))
+        to_base = IntPrompt.ask("\nPilih tujuan konversi", choices=["1", "2", "3", "4"])
 
         # konfirmasi
-        print("\nBerikut adalah konversi yang ingin dilakukan: ")
-        print(f"{number_system[base][0]} -----> {number_system[to_base][0]}\n")
+        console.print("\nBerikut adalah konversi yang ingin dilakukan: ", justify="center")
+        console.print(f"[bold]{number_system[base][0]}[/] ➔ [bold]{number_system[to_base][0]}\n[/]", justify="center")
 
-        count += 1
-        confirm = program1.prompt_options(word="Apakah anda yakin ingin melakukan konversi tersebut?", opts=["y","n"])
-        if confirm == "y":
+        if Confirm.ask("[bold]\nApakah anda yakin ingin melakukan konversi tersebut?"):
             break
 
-    while True:
-        input_value = input(f"\nMasukkan angka dalam Sistem Bilangan {number_system[base][0]}: ") 
-
-        negative_value = False
-        if input_value[0] == "-":
-            input_value = input_value[1:]
-            negative_value = True
-
-        if number_system[base][0] == "Heksadesimal" and not (all([ord(i.upper()) >= 65 and ord(i.upper()) <= 70 for i in input_value if i.isalpha()]) and input_value.isalnum()):
-            print(f"Sistem Bilangan {number_system[base][0]} yang dimasukkan tidak valid!")
-        elif number_system[base][0] == "Desimal" and not input_value.isdecimal():
-            print(f"Sistem Bilangan {number_system[base][0]} yang dimasukkan tidak valid!")
-        elif number_system[base][0] == "Oktal" and (not input_value.isdecimal() or not all([int(i) < 8 for i in input_value])):
-            print(f"Sistem Bilangan {number_system[base][0]} yang dimasukkan tidak valid!")
-        elif number_system[base][0] == "Biner" and (not input_value.isdecimal() or not all([int(i) < 2 for i in input_value])):
-            print(f"Sistem Bilangan {number_system[base][0]} yang dimasukkan tidak valid!")
-        else:
-            input_value = "-" + input_value if negative_value else input_value
-            break
-
+    input_value = None
     output_value = None
 
     match number_system[base][0]:
         case "Biner":
+            input_value = BinPrompt.ask("Masukkan angka dalam Sistem Bilangan Biner")
             output_value = biner_conversion(input_value, number_system[to_base][1])
         case "Oktal":
+            input_value = OctPrompt.ask("Masukkan angka dalam Sistem Bilangan Oktal")
             output_value = octal_conversion(input_value, number_system[to_base][1])
         case "Desimal":
+            input_value = DecPrompt.ask("Masukkan angka dalam Sistem Bilangan Desimal")
             output_value = decimal_conversion(int(input_value), number_system[to_base][1])
         case "Heksadesimal":
+            input_value = HexPrompt.ask("Masukkan angka dalam Sistem Bilangan Heksadesimal")
             output_value = hexadecimal_conversion(input_value, number_system[to_base][1])
 
-    print(f"Berikut adalah hasil konversinya: {output_value}")
+    layout_conversion = Layout(name="conversion", size=3)
+    layout_conversion.split_column(
+        Layout(name="conversion_child", size=3, ratio=1, minimum_size=3),
+    )
 
-    confirm = program1.prompt_options(word="\nQuit Program?", opts=["y","n"])
-    if confirm == "y":
+    layout_conversion["conversion_child"].split_row(
+            Layout(name="base", ratio=3),
+            Align.center(Text("➔", justify="center"), vertical="middle"),
+            Layout(name="to_base", ratio=3)
+    )
+
+    layout_conversion["base"].update(Panel(Text(f"{input_value}", justify="center", style="bold"), title=f"[bold]{number_system[base][0]}"))
+    layout_conversion["to_base"].update(Panel(Text(f"{output_value}", justify="center", style="bold"), title=f"[bold]{number_system[to_base][0]}"))
+
+    console.print(layout_conversion, height=3)
+
+    if Confirm.ask("[bold]Keluar Program?"):
         return program1.stop()
 
-title = "========== Program 1: Konversi Sistem Bilangan ==========\n" # untuk di tampilkan sebagai judul
+title = "[bold #9ee5ff]Program 1: Konversi Sistem Bilangan\n" # untuk di tampilkan sebagai judul
 name = "Konversi Sistem Bilangan" # untuk di tampilkan di list menu
-description = ("""Deskripsi Program:
-* Ini merupakan program untuk mengonversi bilangan dari satu sistem bilangan ke sistem bilangan lain. 
-* Program ini menggunakan implementasi struktur data tumpukan (stack) dalam melakukan konversi sistem bilangan. 
-* Program ini hanya menangani bilangan bulat saja (positif dan negatif), dimana pada bilangan negatif diawali dengan tanda '-'.\n""", False) # deskripsi program
+description = """[bold]
+🔷 Program 1 merupakan program untuk mengonversi bilangan dari satu sistem bilangan ke sistem bilangan lain. 
+🔷 Program ini menggunakan implementasi struktur data tumpukan (stack) dalam melakukan konversi sistem bilangan. 
+🔷 Program ini hanya menangani bilangan bulat saja (positif dan negatif), dimana pada bilangan negatif diawali dengan tanda '-'.\n""" # deskripsi program
 
 program1 = App(name=name, title=title, description=description, program=main)
 

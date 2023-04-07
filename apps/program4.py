@@ -1,7 +1,9 @@
-from utils.app import App
+from utils.app import *
+
 from collections import deque
 
 def reverse_string(x: str):
+    """Fungsi untuk reverse string"""
     stack = deque(x)
 
     hasil_akhir = ""
@@ -23,35 +25,45 @@ def main():
         3: "Keluar program"
     }
 
-    count = 0
-    while True:
-        if count > 0:
-            program4.clear()
-            print(program4.title)
+    option_str = "\n[bold]"
+    for k, v in option.items():
+        option_str += f"{k}. {v}\n"
 
-        input_string = input("Hai! Masukkan string yang ingin di dibalik, lalu klik enter:\n")
+    menu_str = "\n[bold]"
+    for k, v in menu.items():
+        menu_str += f"{k}. {v}\n"
+
+    panel_description = Panel(program4.description, title="[bold #9ee5ff]Deskripsi Program", title_align="left")
+    panel_option = Panel(option_str, title="[bold #9ee5ff]Opsi Reverse String", title_align="left")
+    panel_menu = Panel(menu_str, title="[bold #9ee5ff]Menu", title_align="left")
+
+    while True:
+        console.clear()
+        console.rule(program4.title)
+        console.print(Padding(panel_description, pad=(1, 0, 0, 0)))
+
+        input_string = Prompt.ask("[bold]\nHai👋! Masukkan string yang ingin di dibalik, lalu klik 'enter'\n")
 
         count = 0
         while True:
-            program4.clear()
-            print(program4.title)
-            print(f"Original String:\n{input_string}\n")
+            console.clear()
+            console.rule(program4.title)
 
             if count == 0:
-                print("Opsi Reverse String:")
-                for k, v in option.items():
-                    print(f"{k}. {v}")
-                    
-                opt = int(program4.prompt_options(word="\nPilih Opsi:", opts=[i for i in option.keys()]))
+                console.print(Padding(panel_option, pad=(1, 0, 0, 0)))
+                opt = IntPrompt.ask("\n[bold]Pilih Opsi", choices=["1", "2"])
                 
                 import getpass
                 match opt:
                     case 1:
-                        program4.clear()
-                        print(program4.title)
-                        print(f"Original String:\n{input_string}\n")
+                        console.clear()
+                        console.rule(program4.title)
 
-                        print(f"Berikut ini adalah string yang sudah dibalik:\n{reverse_string(input_string)}")
+                        original_string = Panel(f"\n[bold]{input_string}\n", title="[bold #9ee5ff]Original String")
+                        reversed_string = Panel(f"\n[bold]{reverse_string(input_string)}\n", title="[bold #9ee5ff]Reversed String")
+
+                        console.print(Padding(original_string, pad=(1, 0, 0, 0)))
+                        console.print(Padding(reversed_string, pad=(1, 0, 0, 0)))
 
                         getpass.getpass("\nKlik 'enter' untuk melanjutkan")
                         count += 1
@@ -67,21 +79,21 @@ def main():
                         while len(reverse_stack_words) > 0:
                             result += reverse_stack_words.pop() + " "
 
-                        program4.clear()
-                        print(program4.title)
-                        print(f"Original String:\n{input_string}\n")
+                        console.clear()
+                        console.rule(program4.title)
 
-                        print(f"Berikut ini adalah string yang sudah dibalik:\n{result}")
+                        original_string = Panel(f"\n[bold]{input_string}\n", title="[bold #9ee5ff]Original String")
+                        reversed_string = Panel(f"\n[bold]{result}\n", title="[bold #9ee5ff]Reversed String")
+
+                        console.print(Padding(original_string, pad=(1, 0, 0, 0)))
+                        console.print(Padding(reversed_string, pad=(1, 0, 0, 0)))
 
                         getpass.getpass("\nKlik 'enter' untuk melanjutkan")
                         count += 1
                         continue
 
-            print("Pilih Menu:")
-            for k, v in menu.items():
-                print(f"{k}. {v}")
-
-            opt = int(program4.prompt_options(word="\nPilih Opsi:", opts=[i for i in menu.keys()]))
+            console.print(Padding(panel_menu, pad=(1, 0, 0, 0)))
+            opt = IntPrompt.ask("\n[bold]Pilih Menu", choices=["1", "2", "3"])
 
             match opt:
                 case 1:
@@ -93,12 +105,12 @@ def main():
                 case 3:
                     return program4.stop()
 
-title = "========== Program 4: Reverse String ==========\n" # untuk di tampilkan sebagai judul
+title = "[bold #9ee5ff]Program 4: Reverse String" # untuk di tampilkan sebagai judul
 name = "Reverse String" # untuk di tampilkan di list menu
-description = ("""Deskripsi Program:
-* Ini merupakan program untuk membalikkan string.
-* Program ini mengimplementasikan struktur data tumpukan (stack) untuk membalikkan string.
-* Pada program ini terdapat fitur untuk membalikkan string keseluruhan dan membalikkan string perkata.\n""", False) # deskripsi program
+description = """[bold]
+🔷 Ini merupakan program untuk membalikkan string.
+🔷 Program ini mengimplementasikan struktur data tumpukan (stack) untuk membalikkan string.
+🔷 Pada program ini terdapat fitur untuk membalikkan string keseluruhan dan membalikkan string perkata.\n""" # deskripsi program
 program4 = App(name=name, title=title, description=description, program=main)
 
 if __name__ == "__main__":
