@@ -261,13 +261,13 @@ def main():
         base = IntPrompt.ask("\nPilih sistem bilangan yang ingin dikonversi", choices=["1", "2", "3", "4"])
 
         # pilih tujuan konversi
-        to_base = IntPrompt.ask("Pilih tujuan konversi", choices=["1", "2", "3", "4"])
+        to_base = IntPrompt.ask("\nPilih tujuan konversi", choices=["1", "2", "3", "4"])
 
         # konfirmasi
         console.print("\nBerikut adalah konversi yang ingin dilakukan: ", justify="center")
         console.print(f"[bold]{number_system[base][0]}[/] ➔ [bold]{number_system[to_base][0]}\n[/]", justify="center")
 
-        if Confirm.ask("[bold]Apakah anda yakin ingin melakukan konversi tersebut?"):
+        if Confirm.ask("[bold]\nApakah anda yakin ingin melakukan konversi tersebut?"):
             break
 
     input_value = None
