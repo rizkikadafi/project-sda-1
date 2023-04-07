@@ -64,7 +64,12 @@ def table_data(data: Stack, opt: str) -> Table | Panel:
     return table
 
 def main():
-    maks = IntPrompt.ask("\n" + r"[bold]Masukkan maksimal daya tampung data \[bilangan bulat]")
+    while True:
+        maks = IntPrompt.ask("\n" + r"[bold]Masukkan maksimal daya tampung data \[bilangan bulat (positif)]")
+        if maks > 0:
+            break
+
+        console.print("[prompt.invalid]Harap masukkan bilangan bulat positif (lebih besar dari 0)!")
 
     stack = Stack(maks)
 
