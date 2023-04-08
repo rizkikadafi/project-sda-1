@@ -5,7 +5,7 @@ from collections import deque
 def full_data_panel(value) -> Panel:
     """Panel untuk menampilkan info ketika data penuh."""
 
-    panel = Panel(Text(f"\nTumpukan telah penuh! [{value}] tidak dimasukkan!\n", justify="center", style="bold"), title="[bold]INFO")
+    panel = Panel(Text(f"\nTumpukan telah penuh! [{value}] tidak dimasukkan!\n", justify="center", style="text_warning"), title="[title_warning]INFO", style="warning")
     return panel
 
 def success_panel(value, operation: str) -> Panel:
@@ -14,11 +14,11 @@ def success_panel(value, operation: str) -> Panel:
     panel = Panel("None")
     match operation:
         case "addition":
-            panel = Panel(Text(f"\n[{value}] berhasil dimasukkan.\n", justify="center", style="bold"), title="[bold]INFO")
+            panel = Panel(Text(f"\n[{value}] berhasil dimasukkan.\n", justify="center", style="text_success"), title="[title_success]INFO", style="success")
         case "deletion":
-            panel = Panel(Text(f"\n[{value}] berhasil dihapus!\n", justify="center", style="bold"), title="[bold]INFO")
+            panel = Panel(Text(f"\n[{value}] berhasil dihapus!\n", justify="center", style="text_success"), title="[title_success]INFO", style="success")
         case "emptying":
-            panel = Panel(Text(f"\nTumpukan telah dikosongkan!\n", justify="center", style="bold"), title="[bold]INFO")
+            panel = Panel(Text(f"\nTumpukan telah dikosongkan!\n", justify="center", style="text_success"), title="[title_success]INFO", style="success")
 
     return panel
 
@@ -28,11 +28,11 @@ def empty_data_panel(operation: str) -> Panel:
     panel = Panel("None")
     match operation:
         case "deletion":
-            panel = Panel(Text("\nTumpukan Kosong! Tidak ada data yang bisa dihapus!\n", justify="center", style="bold"), title="[bold]INFO")
+            panel = Panel(Text("\nTumpukan Kosong! Tidak ada data yang bisa dihapus!\n", justify="center", style="text_warning"), title="[title_warning]INFO", style="warning")
         case "display_top_data":
-            panel = Panel(Text("\nTumpukan Kosong! Tidak ada data teratas yang bisa ditampilkan!\n", justify="center", style="bold"), title="[bold]INFO")
+            panel = Panel(Text("\nTumpukan Kosong! Tidak ada data teratas yang bisa ditampilkan!\n", justify="center", style="text_warning"), title="[title_warning]INFO", style="warning")
         case "display_all_data":
-            panel = Panel(Text("\nTumpukan Kosong! Tidak ada data yang bisa ditampilkan!\n", justify="center", style="bold"), title="[bold]INFO")
+            panel = Panel(Text("\nTumpukan Kosong! Tidak ada data yang bisa ditampilkan!\n", justify="center", style="text_warning"), title="[title_warning]INFO", style="warning")
 
     return panel
 
@@ -41,22 +41,22 @@ def table_data(data: deque, opt: str) -> Table | Panel:
 
     list_data = [i for i in data] 
 
-    table = Table()
-    table.add_column("No.", style="bold", justify="center")
-    table.add_column("Data", style="bold", min_width=20)
+    table = Table(style="default")
+    table.add_column("[text_title]No.", style="text_default", justify="center")
+    table.add_column("[text_title]Data", style="text_default", min_width=20)
 
     match opt:
         case "top_data":
-            table.title = "[bold]Data Teratas"
+            table.title = "[text_title]Data Teratas"
 
             table.add_row("1", data[-1])
         case "all_data":
-            table.title = "[bold]Data Pada Tumpukan"
+            table.title = "[text_title]Data Pada Tumpukan"
 
             for i in range(len(list_data)):
                 table.add_row(f"{i+1}", list_data.pop())
         case "all_data_deletion":
-            table.title = "[bold]Data Pada Tumpukan"
+            table.title = "[text_title]Data Pada Tumpukan"
 
             for i in range(len(list_data)):
                 table.add_row(f"{i+1}", data.pop())
@@ -75,21 +75,21 @@ def main():
         6: "Keluar program"
     }   
 
-    menu_str = "\n[bold]"
+    menu_str = "\n[text_default]"
     for i, k in menu.items():
         menu_str += f"{i}. {k}\n"
 
-    panel_menu = Panel(menu_str, title="[bold #9ee5ff]Menu Program", title_align="left")
-    panel_description = Panel(program3.description, title="[bold #9ee5ff]Deskripsi Program", title_align="left")
+    panel_menu = Panel(menu_str, title="[text_title]Menu Program", title_align="left", style="default")
+    panel_description = Panel(program3.description, title="[text_title]Deskripsi Program", title_align="left", style="default")
 
     while True:
         console.clear()
-        console.rule(program3.title)
+        console.rule(program3.title, style="default")
         console.print(Padding(panel_description, pad=(1, 0, 0, 0)))
 
         console.print(Padding(panel_menu, pad=(1, 0, 0, 0)))
 
-        opt = IntPrompt.ask("[bold]\nPilih menu", choices=["1", "2", "3", "4", "5", "6"])
+        opt = IntPrompt.ask("[bold]\nPilih menu", choices=[str(i) for i in menu.keys()])
 
         import getpass
         match opt:
@@ -134,9 +134,9 @@ def main():
             case 6:
                 return program3.stop()
 
-title = "[bold #9ee5ff]Program 3: Implementasi Tumpukan Tanpa Batasan Data\n" # untuk di tampilkan sebagai judul
+title = "[text_title]Program 3: Implementasi Tumpukan Tanpa Batasan Data\n" # untuk di tampilkan sebagai judul
 name = "Tumpukan Tanpa Batasan Data" # untuk di tampilkan di list menu
-description = """[bold]
+description = """[text_default]
 🔷 Program 3 merupakan program implementasi struktur data tumpukan (stack) dengan menggunakan class deque pada python. 
 🔷 Program ini memiliki fitur untuk menambahkan, menampilkan dan menghapus data.
 🔷 Pada program ini, maksimal data yang dapat dimasukkan tidak dibatasi.\n""" # deskripsi program
