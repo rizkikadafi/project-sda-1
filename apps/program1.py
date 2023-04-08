@@ -243,31 +243,31 @@ def main():
         4: ("Heksadesimal", 16)
     }
 
-    menu = "\n[bold]"
+    menu = "\n[text_default]"
     for k, v in number_system.items():
         menu += f"{k}. {v[0]}\n"
 
-    panel_menu = Panel(menu, title="[bold #9ee5ff]Sistem Bilangan", title_align="left")
-    panel_description = Panel(program1.description, title="[bold #9ee5ff]Deskripsi Program", title_align="left")
+    panel_menu = Panel(menu, title="[text_title]Sistem Bilangan", title_align="left", style="default")
+    panel_description = Panel(program1.description, title="[text_title]Deskripsi Program", title_align="left", style="default")
 
     while True:
         console.clear()
-        console.rule(program1.title)
-        console.print(Padding(panel_description, pad=(1, 0, 0, 0)))
+        console.rule(program1.title, style="default")
+        console.print(Padding(panel_description, pad=(1, 0, 0, 0)), style="default")
 
-        console.print(Padding(panel_menu, pad=(1, 0, 0, 0)))
+        console.print(Padding(panel_menu, pad=(1, 0, 0, 0)), style="default")
 
         # pilih sistem bilangan yang ingin di konversi
-        base = IntPrompt.ask("\nPilih sistem bilangan yang ingin dikonversi", choices=["1", "2", "3", "4"])
+        base = IntPrompt.ask("\n[bold]Pilih sistem bilangan yang ingin dikonversi", choices=[str(i) for i in number_system.keys()])
 
         # pilih tujuan konversi
-        to_base = IntPrompt.ask("\nPilih tujuan konversi", choices=["1", "2", "3", "4"])
+        to_base = IntPrompt.ask("\n[bold]Pilih tujuan konversi", choices=[str(i) for i in number_system.keys()])
 
         # konfirmasi
-        console.print("\nBerikut adalah konversi yang ingin dilakukan: ", justify="center")
-        console.print(f"[bold]{number_system[base][0]}[/] ➔ [bold]{number_system[to_base][0]}\n[/]", justify="center")
+        console.print(Text("\nBerikut adalah konversi yang ingin dilakukan", style="underline bold"), justify="center")
+        console.print(f"[text_default]{number_system[base][0]}[/] ➔ [text_default]{number_system[to_base][0]}\n[/]", justify="center")
 
-        if Confirm.ask("[bold]\nApakah anda yakin ingin melakukan konversi tersebut?"):
+        if Confirm.ask("[bold]Apakah anda yakin ingin melakukan konversi tersebut?"):
             break
 
     input_value = None
@@ -275,16 +275,16 @@ def main():
 
     match number_system[base][0]:
         case "Biner":
-            input_value = BinPrompt.ask("Masukkan angka dalam Sistem Bilangan Biner")
+            input_value = BinPrompt.ask("[bold]Masukkan angka dalam Sistem Bilangan Biner")
             output_value = biner_conversion(input_value, number_system[to_base][1])
         case "Oktal":
-            input_value = OctPrompt.ask("Masukkan angka dalam Sistem Bilangan Oktal")
+            input_value = OctPrompt.ask("[bold]Masukkan angka dalam Sistem Bilangan Oktal")
             output_value = octal_conversion(input_value, number_system[to_base][1])
         case "Desimal":
-            input_value = DecPrompt.ask("Masukkan angka dalam Sistem Bilangan Desimal")
+            input_value = DecPrompt.ask("[bold]Masukkan angka dalam Sistem Bilangan Desimal")
             output_value = decimal_conversion(int(input_value), number_system[to_base][1])
         case "Heksadesimal":
-            input_value = HexPrompt.ask("Masukkan angka dalam Sistem Bilangan Heksadesimal")
+            input_value = HexPrompt.ask("[bold]Masukkan angka dalam Sistem Bilangan Heksadesimal")
             output_value = hexadecimal_conversion(input_value, number_system[to_base][1])
 
     layout_conversion = Layout(name="conversion", size=3)
@@ -298,17 +298,17 @@ def main():
             Layout(name="to_base", ratio=3)
     )
 
-    layout_conversion["base"].update(Panel(Text(f"{input_value}", justify="center", style="bold"), title=f"[bold]{number_system[base][0]}"))
-    layout_conversion["to_base"].update(Panel(Text(f"{output_value}", justify="center", style="bold"), title=f"[bold]{number_system[to_base][0]}"))
+    layout_conversion["base"].update(Panel(Text(f"{input_value}", justify="center", style="text_default"), title=f"[text_title]{number_system[base][0]}", style="default"))
+    layout_conversion["to_base"].update(Panel(Text(f"{output_value}", justify="center", style="text_default"), title=f"[text_title]{number_system[to_base][0]}", style="default"))
 
     console.print(layout_conversion, height=3)
 
     if Confirm.ask("[bold]Keluar Program?"):
         return program1.stop()
 
-title = "[bold #9ee5ff]Program 1: Konversi Sistem Bilangan\n" # untuk di tampilkan sebagai judul
+title = "[text_title]Program 1: Konversi Sistem Bilangan\n" # untuk di tampilkan sebagai judul
 name = "Konversi Sistem Bilangan" # untuk di tampilkan di list menu
-description = """[bold]
+description = """[text_default]
 🔷 Program 1 merupakan program untuk mengonversi bilangan dari satu sistem bilangan ke sistem bilangan lain. 
 🔷 Program ini menggunakan implementasi struktur data tumpukan (stack) dalam melakukan konversi sistem bilangan. 
 🔷 Program ini hanya menangani bilangan bulat saja (positif dan negatif), dimana pada bilangan negatif diawali dengan tanda '-'.\n""" # deskripsi program

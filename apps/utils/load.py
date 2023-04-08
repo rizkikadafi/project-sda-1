@@ -5,20 +5,20 @@ class Load(App):
         self.programs = programs
 
     def run(self):
-        menus = "\n[bold]"
+        menus = "\n[text_default]"
         for i in range(len(self.programs)):
             menus += f"{i+1}. {self.programs[i].name}\n"
 
-        panel_menu = Panel(menus, title="[bold #9ee5ff]Menu Program", title_align="left")
-        panel_description = Panel(self.description, title="[bold #9ee5ff]Deskripsi", title_align="left")
-        panel_closing = Panel(Text("\n🙏Terima kasih telah menggunakan aplikasi ini🙏\n", justify="center", style="bold white"), title="[bold #9ee5ff]Program Selesai", style="bold #9ee5ff")
+        panel_menu = Panel(menus, title="[text_title]Menu Program", title_align="left")
+        panel_description = Panel(self.description, title="[text_title]Deskripsi", title_align="left")
+        panel_closing = Panel(Text("\n🙏Terima kasih telah menggunakan aplikasi ini🙏\n", justify="center", style="text_default"), title="[text_title]Program Selesai", style="default")
 
         count = 0
         while True:
             console.clear()
-            console.rule(self.title)
-            console.print(Padding(panel_description, pad=(1, 0, 0, 0)))
-            console.print(Padding(panel_menu, pad=(1, 0, 0, 0)))
+            console.rule(self.title, style="default")
+            console.print(Padding(panel_description, pad=(1, 0, 0, 0)), style="default")
+            console.print(Padding(panel_menu, pad=(1, 0, 0, 0)), style="default")
 
             if count % 2 == 0:
                 opt = IntPrompt.ask("[bold]\nPilih Program", choices=[str(i+1) for i in range(len(self.programs))])
