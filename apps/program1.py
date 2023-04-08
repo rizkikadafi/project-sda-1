@@ -289,7 +289,7 @@ def main():
 
     layout_conversion = Layout(name="conversion", size=3)
     layout_conversion.split_column(
-        Layout(name="conversion_child", size=3, ratio=1, minimum_size=3),
+        Layout(name="conversion_child", size=5, ratio=1, minimum_size=3),
     )
 
     layout_conversion["conversion_child"].split_row(
@@ -298,10 +298,10 @@ def main():
             Layout(name="to_base", ratio=3)
     )
 
-    layout_conversion["base"].update(Panel(Text(f"{input_value}", justify="center", style="text_default"), title=f"[text_title]{number_system[base][0]}", style="default"))
-    layout_conversion["to_base"].update(Panel(Text(f"{output_value}", justify="center", style="text_default"), title=f"[text_title]{number_system[to_base][0]}", style="default"))
+    layout_conversion["base"].update(Panel(Text(f"\n{input_value}\n", justify="center", style="text_default"), title=f"[text_title]{number_system[base][0]}", style="default"))
+    layout_conversion["to_base"].update(Panel(Text(f"\n{output_value}\n", justify="center", style="text_default"), title=f"[text_title]{number_system[to_base][0]}", style="default"))
 
-    console.print(layout_conversion, height=3)
+    console.print(layout_conversion, height=5)
 
     if Confirm.ask("[bold]Keluar Program?"):
         return program1.stop()
