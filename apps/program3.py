@@ -29,9 +29,7 @@ def empty_data_panel(operation: str) -> Panel:
     match operation:
         case "deletion":
             panel = Panel(Text("\nTumpukan Kosong! Tidak ada data yang bisa dihapus!\n", justify="center", style="text_warning"), title="[title_warning]INFO", style="warning")
-        case "display_top_data":
-            panel = Panel(Text("\nTumpukan Kosong! Tidak ada data teratas yang bisa ditampilkan!\n", justify="center", style="text_warning"), title="[title_warning]INFO", style="warning")
-        case "display_all_data":
+        case "display_data":
             panel = Panel(Text("\nTumpukan Kosong! Tidak ada data yang bisa ditampilkan!\n", justify="center", style="text_warning"), title="[title_warning]INFO", style="warning")
 
     return panel
@@ -68,19 +66,28 @@ def main():
 
     menu = {
         1: "Tambahkan data",
-        2: "Hapus data teratas",
-        3: "Tampilkan data teratas",
-        4: "Tampilkan seluruh data (Tanpa penghapusan)",
-        5: "Tampilkan seluruh data (Dengan penghapusan!)",
-        6: "Keluar program"
-    }   
+        2: "Tampilkan data",
+        3: "Hapus data teratas",
+        4: "Keluar program"
+    }
 
     menu_str = "\n[text_default]"
     for i, k in menu.items():
         menu_str += f"{i}. {k}\n"
 
+    display_data_opt = {
+        1: "Tampilkan data teratas",
+        2: "Tampilkan seluruh data (Tanpa penghapusan)",
+        3: "Tampilkan seluruh data (Dengan penghapusan!)",
+    }
+
+    display_data_opt_str = "\n[text_default]"
+    for k, v in display_data_opt.items():
+        display_data_opt_str += f"{k}. {v}\n"
+
     panel_menu = Panel(menu_str, title="[text_title]Menu Program", title_align="left", style="default")
     panel_description = Panel(program3.description, title="[text_title]Deskripsi Program", title_align="left", style="default")
+    panel_display_data_opt = Panel(display_data_opt_str, title="[text_title]Opsi Tampilan Data", title_align="left", style="default")
 
     while True:
         console.clear()
@@ -102,36 +109,38 @@ def main():
                 getpass.getpass("\nKlik 'enter' untuk melanjutkan")
             case 2:
                 if len(stack) == 0:
-                    console.print(empty_data_panel(operation="deletion"))
-                else:
-                    data = stack.pop()
-                    console.print(success_panel(data, operation="deletion"))
+                    console.print(empty_data_panel(operation="display_data"))
+                    getpass.getpass("\nKlik 'Enter' untuk melanjutkan")
+                    continue
+
+                console.clear()
+                console.rule(program3.title, style="default")
+
+                console.print(Padding(panel_display_data_opt, pad=(1, 0, 0, 0)))
+                opt = IntPrompt.ask("\n[bold]Pilih Opsi Tampilan Data", choices=[str(i) for i in display_data_opt.keys()])
+
+                match opt:
+                    case 1:
+                        console.print(table_data(stack, opt="top_data"), justify="center")
+                    case 2:
+                        console.print(table_data(stack, opt="all_data"), justify="center")
+                    case 3:
+                        console.print(table_data(stack, opt="all_data_deletion"), justify="center")
+                        console.print(Padding(success_panel(None, operation="emptying"), pad=(1, 0, 0, 0)))
+
 
                 getpass.getpass("\nKlik 'Enter' untuk melanjutkan")
             case 3:
                 if len(stack) == 0:
-                    console.print(empty_data_panel(operation="display_top_data"))
+                    console.print(empty_data_panel(operation="deletion"))
                 else:
                     console.print(table_data(stack, opt="top_data"), justify="center")
+                    if Confirm.ask("\n[bold]Apakah anda yakin ingin menghapus data tersebut!"):
+                        data = stack.pop()
+                        console.print(success_panel(data, operation="deletion"))
 
                 getpass.getpass("\nKlik 'Enter' untuk melanjutkan")
             case 4:
-                data = [i for i in stack] 
-                if len(data) == 0:
-                    console.print(empty_data_panel(operation="display_all_data"))
-                else:
-                    console.print(table_data(stack, opt="all_data"), justify="center")
-
-                getpass.getpass("\nKlik 'Enter' untuk melanjutkan")
-            case 5:
-                if len(stack) == 0:
-                    console.print(empty_data_panel(operation="display_all_data"))
-                else:
-                    console.print(table_data(stack, opt="all_data_deletion"), justify="center")
-                    console.print(Padding(success_panel(None, operation="emptying"), pad=(1, 0, 0, 0)))
-
-                getpass.getpass("\nKlik 'Enter' untuk melanjutkan")
-            case 6:
                 return program3.stop()
 
 title = "[text_title]Program 3: Implementasi Tumpukan Tanpa Batasan Data\n" # untuk di tampilkan sebagai judul
