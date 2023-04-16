@@ -4,7 +4,7 @@ class Load(App):
     def add(self, programs):
         self.programs = programs
 
-    def run(self):
+    def start(self):
         menus = "\n[text_default]"
         for i in range(len(self.programs)):
             menus += f"{i+1}. {self.programs[i].name}\n"

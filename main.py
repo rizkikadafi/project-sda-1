@@ -13,4 +13,4 @@ programs = Load(title=title, description=description)
 programs.add([program1, program2, program3, program4])
 
 if __name__ == "__main__":
-    programs.run()
+    programs.start()
