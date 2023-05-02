@@ -20,7 +20,7 @@ class Load(App):
             console.print(Padding(panel_description, pad=(1, 0, 0, 0)), style="default")
             console.print(Padding(panel_menu, pad=(1, 0, 0, 0)), style="default")
 
-            if count % 2 == 0:
+            if count == 0:
                 opt = IntPrompt.ask("[bold]\nPilih Program", choices=[str(i+1) for i in range(len(self.programs))])
                 self.programs[opt-1].start()
                 count += 1
@@ -30,4 +30,4 @@ class Load(App):
                     console.print(panel_closing)
                     break
                 else:
-                    count += 1
+                    count = 0
