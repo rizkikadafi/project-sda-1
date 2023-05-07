@@ -101,7 +101,12 @@ def main():
         import getpass
         match opt:
             case 1:
-                data = Prompt.ask("[bold]\nMasukkan data")
+                while True:
+                    data = Prompt.ask("[bold]\nMasukkan data")
+                    if data == "":
+                        console.print("[prompt.invalid]Data tidak boleh kosong!")
+                    else:
+                        break
 
                 stack.append(data)
                 console.print(success_panel(data, operation="addition"))

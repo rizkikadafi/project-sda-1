@@ -109,7 +109,12 @@ def main():
         import getpass
         match opt:
             case 1:
-                data = Prompt.ask("[bold]\nMasukkan data")
+                while True:
+                    data = Prompt.ask("[bold]\nMasukkan data")
+                    if data == "":
+                        console.print("[prompt.invalid]Data tidak boleh kosong!")
+                    else:
+                        break
                 if stack.full():
                     console.print(full_data_panel(data))
                 else:
