@@ -102,7 +102,6 @@ def main():
 
             match opt:
                 case 1:
-                    count += 1
                     break
                 case 2:
                     count = 0
