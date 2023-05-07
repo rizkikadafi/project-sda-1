@@ -42,7 +42,12 @@ def main():
         console.rule(program4.title, style="default")
         console.print(Padding(panel_description, pad=(1, 0, 0, 0)))
 
-        input_string = Prompt.ask("[bold]\nHai👋! Masukkan string yang ingin di dibalik, lalu klik 'enter'\n")
+        while True:
+            input_string = Prompt.ask("[bold]\nHai👋! Masukkan string yang ingin di dibalik, lalu klik 'enter'\n")
+            if input_string == "":
+                console.print("[prompt.invalid]String tidak boleh kosong!")
+            else:
+                break
 
         count = 0
         while True:
