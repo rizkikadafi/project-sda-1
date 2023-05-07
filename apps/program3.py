@@ -2,12 +2,6 @@ from utils.app import *
 
 from collections import deque
 
-def full_data_panel(value) -> Panel:
-    """Panel untuk menampilkan info ketika data penuh."""
-
-    panel = Panel(Text(f"\nTumpukan telah penuh! [{value}] tidak dimasukkan!\n", justify="center", style="text_warning"), title="[title_warning]INFO", style="warning")
-    return panel
-
 def success_panel(value, operation: str) -> Panel:
     """Panel untuk menampilkan info ketika operasi tertentu berhasil dilakukan."""
 
