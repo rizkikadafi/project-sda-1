@@ -234,6 +234,23 @@ class HexPrompt(PromptBase):
             raise InvalidResponse(self.validate_error_massage)
         return "-" + value if negative_value else value 
 
+def result_conversion_layout(base: tuple, to_base: tuple):
+    layout_conversion = Layout(name="conversion", size=3)
+    layout_conversion.split_column(
+        Layout(name="conversion_child", size=5, ratio=1, minimum_size=3),
+    )
+
+    layout_conversion["conversion_child"].split_row(
+            Layout(name="base", ratio=3),
+            Align.center(Text("➔", justify="center"), vertical="middle"),
+            Layout(name="to_base", ratio=3)
+    )
+
+    layout_conversion["base"].update(Panel(Text(f"\n{base[1]}\n", justify="center", style="text_default"), title=f"[text_title]{base[0]}", style="default"))
+    layout_conversion["to_base"].update(Panel(Text(f"\n{to_base[1]}\n", justify="center", style="text_default"), title=f"[text_title]{to_base[0]}", style="default"))
+
+    return layout_conversion
+
 def main():
     # Menu sistem bilangan
     number_system = {
@@ -247,7 +264,17 @@ def main():
     for k, v in number_system.items():
         menu += f"{k}. {v[0]}\n"
 
+    mode_opt = {
+        1: "one-to-one conversion",
+        2: "one-to-all conversion"
+    }
+
+    mode_opt_str = "\n[text_default]"
+    for k, v in mode_opt.items():
+        mode_opt_str += f"{k}. {v}\n"
+
     panel_menu = Panel(menu, title="[text_title]Sistem Bilangan", title_align="left", style="default")
+    panel_mode_opt = Panel(mode_opt_str, title="[text_title]Mode Konversi", title_align="left", style="default")
     panel_description = Panel(program1.description, title="[text_title]Deskripsi Program", title_align="left", style="default")
 
     while True:
@@ -255,56 +282,95 @@ def main():
         console.rule(program1.title, style="default")
         console.print(Padding(panel_description, pad=(1, 0, 0, 0)), style="default")
 
-        console.print(Padding(panel_menu, pad=(1, 0, 0, 0)), style="default")
+        console.print(Padding(panel_mode_opt, pad=(1, 0, 0, 0)), style="default")
 
-        # pilih sistem bilangan yang ingin di konversi
-        base = IntPrompt.ask("\n[bold]Pilih sistem bilangan yang ingin dikonversi", choices=[str(i) for i in number_system.keys()])
+        mode = IntPrompt.ask("\n[bold]Pilih mode konversi", choices=[str(i) for i in mode_opt.keys()])
+        match mode:
+            case 1:
+                while True:
+                    console.clear()
+                    console.rule(program1.title, style="default")
 
-        # pilih tujuan konversi
-        to_base = IntPrompt.ask("\n[bold]Pilih tujuan konversi", choices=[str(i) for i in number_system.keys()])
+                    console.print(Padding(panel_menu, pad=(1, 0, 0, 0)), style="default")
 
-        # konfirmasi
-        console.print(Text("\nBerikut adalah konversi yang ingin dilakukan", style="underline bold"), justify="center")
-        console.print(f"[text_default]{number_system[base][0]}[/] ➔ [text_default]{number_system[to_base][0]}\n[/]", justify="center")
+                    base = IntPrompt.ask("\n[bold]Pilih sistem bilangan yang ingin dikonversi", choices=[str(i) for i in number_system.keys()])
+                    to_base = IntPrompt.ask("\n[bold]Pilih tujuan konversi", choices=[str(i) for i in number_system.keys()])
 
-        if Confirm.ask("[bold]Apakah anda yakin ingin melakukan konversi tersebut?"):
-            break
+                    console.print(Panel(f"\n[text_default]{number_system[base][0]}[/] ➔ [text_default]{number_system[to_base][0]}\n[/]", style="default", title="[text_title]Koversi Sistem Bilangan"), justify="center")
 
-    input_value = None
-    output_value = None
+                    if Confirm.ask("\n[bold]Apakah anda yakin ingin melakukan konversi tersebut?"):
+                        break
 
-    match number_system[base][0]:
-        case "Biner":
-            input_value = BinPrompt.ask("[bold]Masukkan angka dalam Sistem Bilangan Biner")
-            output_value = biner_conversion(input_value, number_system[to_base][1])
-        case "Oktal":
-            input_value = OctPrompt.ask("[bold]Masukkan angka dalam Sistem Bilangan Oktal")
-            output_value = octal_conversion(input_value, number_system[to_base][1])
-        case "Desimal":
-            input_value = DecPrompt.ask("[bold]Masukkan angka dalam Sistem Bilangan Desimal")
-            output_value = decimal_conversion(int(input_value), number_system[to_base][1])
-        case "Heksadesimal":
-            input_value = HexPrompt.ask("[bold]Masukkan angka dalam Sistem Bilangan Heksadesimal")
-            output_value = hexadecimal_conversion(input_value, number_system[to_base][1])
+                input_value = None
+                output_value = None
 
-    layout_conversion = Layout(name="conversion", size=3)
-    layout_conversion.split_column(
-        Layout(name="conversion_child", size=5, ratio=1, minimum_size=3),
-    )
+                match number_system[base][0]:
+                    case "Biner":
+                        input_value = BinPrompt.ask("[bold]Masukkan angka dalam Sistem Bilangan Biner")
+                        output_value = biner_conversion(input_value, number_system[to_base][1])
+                    case "Oktal":
+                        input_value = OctPrompt.ask("[bold]Masukkan angka dalam Sistem Bilangan Oktal")
+                        output_value = octal_conversion(input_value, number_system[to_base][1])
+                    case "Desimal":
+                        input_value = DecPrompt.ask("[bold]Masukkan angka dalam Sistem Bilangan Desimal")
+                        output_value = decimal_conversion(int(input_value), number_system[to_base][1])
+                    case "Heksadesimal":
+                        input_value = HexPrompt.ask("[bold]Masukkan angka dalam Sistem Bilangan Heksadesimal")
+                        output_value = hexadecimal_conversion(input_value, number_system[to_base][1])
+                console.print(result_conversion_layout((number_system[base][0], input_value), (number_system[to_base][0], output_value)), height=5)
+            case 2:
+                pass
 
-    layout_conversion["conversion_child"].split_row(
-            Layout(name="base", ratio=3),
-            Align.center(Text("➔", justify="center"), vertical="middle"),
-            Layout(name="to_base", ratio=3)
-    )
+    #     console.print(Padding(panel_menu, pad=(1, 0, 0, 0)), style="default")
 
-    layout_conversion["base"].update(Panel(Text(f"\n{input_value}\n", justify="center", style="text_default"), title=f"[text_title]{number_system[base][0]}", style="default"))
-    layout_conversion["to_base"].update(Panel(Text(f"\n{output_value}\n", justify="center", style="text_default"), title=f"[text_title]{number_system[to_base][0]}", style="default"))
+    #     # pilih sistem bilangan yang ingin di konversi
+    #     base = IntPrompt.ask("\n[bold]Pilih sistem bilangan yang ingin dikonversi", choices=[str(i) for i in number_system.keys()])
 
-    console.print(layout_conversion, height=5)
+    #     # pilih tujuan konversi
+    #     to_base = IntPrompt.ask("\n[bold]Pilih tujuan konversi", choices=[str(i) for i in number_system.keys()])
 
-    if Confirm.ask("[bold]Keluar Program?"):
-        return program1.stop()
+    #     # konfirmasi
+    #     console.print(Text("\nBerikut adalah konversi yang ingin dilakukan", style="underline bold"), justify="center")
+    #     console.print(f"[text_default]{number_system[base][0]}[/] ➔ [text_default]{number_system[to_base][0]}\n[/]", justify="center")
+
+    #     if Confirm.ask("[bold]Apakah anda yakin ingin melakukan konversi tersebut?"):
+    #         break
+
+    # input_value = None
+    # output_value = None
+
+    # match number_system[base][0]:
+    #     case "Biner":
+    #         input_value = BinPrompt.ask("[bold]Masukkan angka dalam Sistem Bilangan Biner")
+    #         output_value = biner_conversion(input_value, number_system[to_base][1])
+    #     case "Oktal":
+    #         input_value = OctPrompt.ask("[bold]Masukkan angka dalam Sistem Bilangan Oktal")
+    #         output_value = octal_conversion(input_value, number_system[to_base][1])
+    #     case "Desimal":
+    #         input_value = DecPrompt.ask("[bold]Masukkan angka dalam Sistem Bilangan Desimal")
+    #         output_value = decimal_conversion(int(input_value), number_system[to_base][1])
+    #     case "Heksadesimal":
+    #         input_value = HexPrompt.ask("[bold]Masukkan angka dalam Sistem Bilangan Heksadesimal")
+    #         output_value = hexadecimal_conversion(input_value, number_system[to_base][1])
+
+    # layout_conversion = Layout(name="conversion", size=3)
+    # layout_conversion.split_column(
+    #     Layout(name="conversion_child", size=5, ratio=1, minimum_size=3),
+    # )
+
+    # layout_conversion["conversion_child"].split_row(
+    #         Layout(name="base", ratio=3),
+    #         Align.center(Text("➔", justify="center"), vertical="middle"),
+    #         Layout(name="to_base", ratio=3)
+    # )
+
+    # layout_conversion["base"].update(Panel(Text(f"\n{input_value}\n", justify="center", style="text_default"), title=f"[text_title]{number_system[base][0]}", style="default"))
+    # layout_conversion["to_base"].update(Panel(Text(f"\n{output_value}\n", justify="center", style="text_default"), title=f"[text_title]{number_system[to_base][0]}", style="default"))
+
+    # console.print(layout_conversion, height=5)
+
+        if Confirm.ask("[bold]Keluar Program?"):
+            return program1.stop()
 
 title = "[text_title]Program 1: Konversi Sistem Bilangan\n" # untuk di tampilkan sebagai judul
 name = "Konversi Sistem Bilangan" # untuk di tampilkan di list menu
